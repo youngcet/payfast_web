@@ -20,8 +20,8 @@ A Flutter package to integrate Payfast payments into your Flutter web app. This 
 <a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/popularity/payfast" alt="Pub popularity"></a>
 
 <p align="center">
-  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/payfast_demo.gif?raw=true" height="600px">
-  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo.gif?raw=true" height="600px">
+  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px">
 </p>
 <br/>
 <hr/>

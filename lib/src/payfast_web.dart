@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'animation/my_animated_switcher.dart';
 import 'constants.dart';
 import 'dart:html' as html;
@@ -15,8 +14,8 @@ import 'widgets/payment_summary.dart';
 import 'widgets/summary_widget.dart';
 import 'widgets/waiting_overlay.dart';
 
-/// The `PayFast` class is a stateful widget designed to integrate
-/// PayFast's payment processing system into a Flutter application.
+/// The `PayFastWeb` class is a stateful widget designed to integrate
+/// PayFast's payment processing system into a Flutter web application.
 ///
 /// This widget provides a fully customizable payment interface,
 /// allowing developers to easily integrate both sandbox and live
@@ -242,9 +241,6 @@ class _PayFastWebState extends State<PayFastWeb> {
   /// A dynamic widget that holds the WebView or any other widget to be displayed.
   Widget? _showWebViewWidget;
 
-  /// Unique key used for identifying and managing the widget's state in the widget tree.
-  final UniqueKey _key = UniqueKey();
-
   /// A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
 
@@ -389,26 +385,28 @@ class _PayFastWebState extends State<PayFastWeb> {
     }
 
     paymentIdentifier = response['uuid'];
-    if (kIsWeb) {
-      setState(() {
-        _showSpinner = true;
-      });
+    setState(() {
+      _showSpinner = true;
+    });
 
-      String paymentCompletedRoute = widget.paymentCompletedRoute.replaceAll('/', '');
-      String paymentCancelledRoute = widget.paymentCancelledRoute.replaceAll('/', '');
-      
-      final encodedReturnUrl = Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute');
-      final encodedCancelUrl = Uri.encodeComponent('${getBaseUrl()}/#/$paymentCancelledRoute');
-      
-      html.window.location.href = 
+    String paymentCompletedRoute =
+        widget.paymentCompletedRoute.replaceAll('/', '');
+    String paymentCancelledRoute =
+        widget.paymentCancelledRoute.replaceAll('/', '');
+
+    final encodedReturnUrl =
+        Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute');
+    final encodedCancelUrl =
+        Uri.encodeComponent('${getBaseUrl()}/#/$paymentCancelledRoute');
+
+    html.window.location.href =
         '${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier'
         '&return_url=$encodedReturnUrl&cancel_url=$encodedCancelUrl';
-      return;
-    }
+    return;
   }
 
   /// Builds an error card widget with an error icon, message, and a button.
-  /// 
+  ///
   /// [message] - The error message to display.
   /// [btnText] - Optional custom text for the button. Defaults to 'Continue'.
   Widget _error(String message, {String? btnText}) {
@@ -464,7 +462,7 @@ class _PayFastWebState extends State<PayFastWeb> {
                 ),
                 child: Text(
                   btnText ?? 'Continue',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),

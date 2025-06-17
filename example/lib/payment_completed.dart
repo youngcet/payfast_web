@@ -54,7 +54,7 @@ class PaymentCompletedScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 30, 
+                      horizontal: 30,
                       vertical: 15,
                     ),
                     backgroundColor: Colors.green,

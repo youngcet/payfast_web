@@ -110,65 +110,68 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
 
     return Material(
-        child: Scaffold(
-          body: CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              transitionBetweenRoutes: false,
-              middle: const Text('Payfast Widget Demo'),
-              trailing: GestureDetector(
-                child: const Icon(Icons.arrow_forward),
-                onTap: () => Navigator.of(context).pushNamed('/thank-you'),
-              ),
+      child: Scaffold(
+        body: CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: false,
+            middle: const Text('Payfast Widget Demo'),
+            trailing: GestureDetector(
+              child: const Icon(Icons.arrow_forward),
+              onTap: () => Navigator.of(context).pushNamed('/thank-you'),
             ),
-            child: SizedBox.expand(
-              child: SingleChildScrollView(
-                primary: true,
-                child: SafeArea(
-                  bottom: false,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: const Text('Checkout using PayFast >>'),
-                        onTap: () => showCupertinoModalBottomSheet(
-                          expand: true,
-                          bounce: true,
-                          enableDrag: true,
-                          context: context,
-                          backgroundColor: Colors.white,
-                          builder: (context) => PayFastWeb(
-                            data: {
-                              'merchant_id': 'xxxxxx',
-                              'merchant_key': 'xxxxxxx',
-                              'name_first': 'Yung',
-                              'name_last': 'Cet',
-                              'email_address': 'young.cet@gmail.com',
-                              'm_payment_id': _randomId(),
-                              'amount': '20',
-                              'item_name': 'Subscription',
-                            },
-                            passPhrase: 'xxxxxxxx',
-                            useSandBox: true,
-                            payButtonStyle: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: Colors.red,
-                              shadowColor: Colors.transparent,
-                            ),
-                            onsiteActivationScriptUrl:
-                                'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
-                            paymentCancelledRoute: 'payment-cancelled',
-                            paymentCompletedRoute: 'payment-completed',
+          ),
+          child: SizedBox.expand(
+            child: SingleChildScrollView(
+              primary: true,
+              child: SafeArea(
+                bottom: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text('Checkout using PayFast >>'),
+                      onTap: () => showCupertinoModalBottomSheet(
+                        expand: true,
+                        bounce: true,
+                        enableDrag: true,
+                        context: context,
+                        backgroundColor: Colors.white,
+                        builder: (context) => PayFastWeb(
+                          data: {
+                            'merchant_id':
+                                'xxxxxx', //replace with your payfast merchant id
+                            'merchant_key':
+                                'xxxxxxx', //replace with your payfast merchant key
+                            'name_first': 'Yung',
+                            'name_last': 'Cet',
+                            'email_address': 'young.cet@gmail.com',
+                            'm_payment_id': _randomId(),
+                            'amount': '20',
+                            'item_name': 'Subscription',
+                          },
+                          passPhrase:
+                              'xxxxxxxx', //replace with your payfast passphrase
+                          useSandBox: true,
+                          payButtonStyle: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            backgroundColor: Colors.red,
+                            shadowColor: Colors.transparent,
                           ),
+                          onsiteActivationScriptUrl:
+                              'https://youngcet.github.io/sandbox_payfast_onsite_payments/',
+                          paymentCancelledRoute: 'payment-cancelled',
+                          paymentCompletedRoute: 'payment-completed',
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         ),
+      ),
     );
   }
 }
