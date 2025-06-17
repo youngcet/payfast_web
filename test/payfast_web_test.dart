@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Material(
       child: Scaffold(
         body: Center(
-          child: PayFastWeb(
+          child: PayFast(
             data: {
               'merchant_id': '0000000',
               'merchant_key': '000000',

@@ -20,8 +20,8 @@ A Flutter package to integrate Payfast payments into your Flutter web app. This 
 <a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/popularity/payfast" alt="Pub popularity"></a>
 
 <p align="center">
-  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo.gif?raw=true" height="600px">
-  <img src="https://github.com/youngcet/payfast/blob/main/doc/payfast_demo_live.gif?raw=true" height="600px">
+  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/sandbox.gif?raw=true" height="500">
+  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/live.gif?raw=true" height="500">
 </p>
 <br/>
 <hr/>
@@ -99,11 +99,11 @@ Copy the `html` file below and host it on a secure server:
             window.payfast_do_onsite_payment({"uuid":uuid}, function (result) {
                 if (result === true) {
                     // Payment Completed
-                    location.href = decodeURIComponent(return_url) || 'completed'; // triggers payment completed widget on app
+                    location.href = return_url ? decodeURIComponent(return_url) : 'completed'; // triggers payment completed widget on app
                 }
                 else {
                     // Payment Window Closed
-                    location.href = decodeURIComponent(cancel_url) || 'closed'; // triggers payment cancelled widget on app
+                    location.href = cancel_url ? decodeURIComponent(cancel_url) : 'closed'; // triggers payment cancelled widget on app
                 }
             });
         </script>
@@ -128,11 +128,11 @@ Alternatively, you can create your own `html` file but make sure to include the 
     window.payfast_do_onsite_payment({"uuid":uuid}, function (result) {
         if (result === true) {
             // Payment Completed
-            location.href = decodeURIComponent(return_url) || 'completed'; // triggers payment completed widget on app
+            location.href = return_url ? decodeURIComponent(return_url) : 'completed'; // triggers payment completed widget on app
         }
         else {
             // Payment Window Closed
-            location.href = decodeURIComponent(cancel_url) || 'closed'; // triggers payment cancelled widget on app
+            location.href = cancel_url ? decodeURIComponent(cancel_url) : 'closed'; // triggers payment cancelled widget on app
         }
     });
 </script>
@@ -197,7 +197,7 @@ Add the key below in `ios/Runner/Info.plist`
 <string>YES</string>
 ```
 
-**Import the package and create a PayFastWeb Widget**
+**Import the package and create a PayFast Widget**
 
 ```dart
 import 'dart:math';
@@ -284,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           enableDrag: true,
                           context: context,
                           backgroundColor: Colors.white,
-                          builder: (context) => PayFastWeb(
+                          builder: (context) => PayFast(
                             data: {
                               'merchant_id': '00000',
                               'merchant_key': '000000',
@@ -338,7 +338,7 @@ Integrate PayFast's secure payment engine directly into the checkout page. Impor
 Configure whether to use PayFast's sandbox or live server. When you choose to use the sandbox or live server, ensure that the hosted `html` file also points to the server's onsite activation script (`<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>`) and the PayFast merchant id and key corresponds to the appropiate server.
 
 ```dart
-PayFastWeb(
+PayFast(
     ...
     useSandBox: true, // true to use Payfast sandbox, false to use their live server
 ) 
@@ -355,7 +355,7 @@ Provide a custom widget for displaying the payment summary with the `paymentSuma
 Custom Payment Summary Widget
 
 ```dart
-PayFastWeb(
+PayFast(
     ...
     ...
     paymentSumarryWidget: Column(
@@ -409,7 +409,7 @@ Or modify the default widget using the properties below:
 **Payment Summary Title & Icon:** Use the `paymentSummaryTitle` and `defaultPaymentSummaryIcon` properties to customize the title and icon of the payment summary section, ensuring it matches your app's theme.
 
 ```dart
-PayFastWeb(
+PayFast(
     ...
     paymentSummaryTitle: 'Order Summary',
     defaultPaymentSummaryIcon: const Icon(
@@ -429,7 +429,7 @@ PayFastWeb(
 The `payButtonStyle` and `payButtonText` properties allow you to style the "Pay Now" button and change its text and styling, ensuring that it fits seamlessly with your app's design.
 
 ```dart
-PayFastWeb(
+PayFast(
     ...
     payButtonText: 'Checkout >>',
     payButtonStyle: ElevatedButton.styleFrom(
@@ -514,7 +514,7 @@ class _PayFastWidgetState extends State<PayFastWidget> {
     return Material(
       child: Scaffold(
           body: Center(
-              child: PayFastWeb(
+              child: PayFast(
         data: widget.data,
         passPhrase: widget.passPhrase,
         useSandBox: widget.useSandBox,

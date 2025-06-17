@@ -137,12 +137,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         enableDrag: true,
                         context: context,
                         backgroundColor: Colors.white,
-                        builder: (context) => PayFastWeb(
+                        builder: (context) => PayFast(
                           data: {
                             'merchant_id':
-                                'xxxxxx', //replace with your payfast merchant id
+                                '0000000000', //replace with your payfast merchant id
                             'merchant_key':
-                                'xxxxxxx', //replace with your payfast merchant key
+                                '00000000000', //replace with your payfast merchant key
                             'name_first': 'Yung',
                             'name_last': 'Cet',
                             'email_address': 'young.cet@gmail.com',
@@ -151,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             'item_name': 'Subscription',
                           },
                           passPhrase:
-                              'xxxxxxxx', //replace with your payfast passphrase
+                              'xxxxxxxxxxx', //replace with your payfast passphrase
                           useSandBox: true,
                           payButtonStyle: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),

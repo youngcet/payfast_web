@@ -14,7 +14,7 @@ import 'widgets/payment_summary.dart';
 import 'widgets/summary_widget.dart';
 import 'widgets/waiting_overlay.dart';
 
-/// The `PayFastWeb` class is a stateful widget designed to integrate
+/// The `PayFast` class is a stateful widget designed to integrate
 /// PayFast's payment processing system into a Flutter web application.
 ///
 /// This widget provides a fully customizable payment interface,
@@ -68,7 +68,7 @@ import 'widgets/waiting_overlay.dart';
 /// ### Example Usage
 ///
 /// ```dart
-/// PayFastWeb(
+/// PayFast(
 ///   passPhrase: 'your-passphrase',
 ///   useSandBox: true,
 ///   data: {
@@ -89,7 +89,7 @@ import 'widgets/waiting_overlay.dart';
 ///   including `merchant_id`, `merchant_key`, `amount`, and `item_name`.
 /// - The onsite activation script URL must be valid and use HTTPS.
 
-class PayFastWeb extends StatefulWidget {
+class PayFast extends StatefulWidget {
   /// The passphrase associated with your PayFast account.
   ///
   /// This is used to secure transactions and ensure the integrity of the
@@ -195,7 +195,7 @@ class PayFastWeb extends StatefulWidget {
   /// A route to navigate to when a payment is cancelled
   final String paymentCancelledRoute;
 
-  PayFastWeb({
+  PayFast({
     required this.useSandBox,
     required this.passPhrase,
     required this.data,
@@ -231,10 +231,10 @@ class PayFastWeb extends StatefulWidget {
             data.containsKey('item_name'), 'Missing required key: item_name');
 
   @override
-  State<PayFastWeb> createState() => _PayFastWebState();
+  State<PayFast> createState() => _PayFastState();
 }
 
-class _PayFastWebState extends State<PayFastWeb> {
+class _PayFastState extends State<PayFast> {
   /// Payment identifier (UUID) that uniquely identifies each payment transaction.
   var paymentIdentifier = '';
 
