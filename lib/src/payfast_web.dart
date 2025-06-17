@@ -394,8 +394,11 @@ class _PayFastWebState extends State<PayFastWeb> {
         _showSpinner = true;
       });
 
-      final encodedReturnUrl = Uri.encodeComponent('${getBaseUrl()}/#/${widget.paymentCompletedRoute}');
-      final encodedCancelUrl = Uri.encodeComponent('${getBaseUrl()}/#/${widget.paymentCancelledRoute}');
+      String paymentCompletedRoute = widget.paymentCompletedRoute.replaceAll('/', '');
+      String paymentCancelledRoute = widget.paymentCancelledRoute.replaceAll('/', '');
+      
+      final encodedReturnUrl = Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute');
+      final encodedCancelUrl = Uri.encodeComponent('${getBaseUrl()}/#/$paymentCancelledRoute');
       
       html.window.location.href = 
         '${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier'

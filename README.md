@@ -93,10 +93,6 @@ Copy the `html` file below and host it on a secure server:
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const uuid = urlParams.get('uuid');
-            
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const uuid = urlParams.get('uuid');
             const return_url = urlParams.get('return_url'); 
             const cancel_url = urlParams.get('cancel_url');
 
