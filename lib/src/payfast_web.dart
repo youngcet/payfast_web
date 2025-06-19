@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
+import 'package:payfast_web/src/route_generator.dart';
 import 'animation/my_animated_switcher.dart';
 import 'constants.dart';
 import 'dart:html' as html;
@@ -195,6 +196,9 @@ class PayFast extends StatefulWidget {
   /// A route to navigate to when a payment is cancelled
   final String paymentCancelledRoute;
 
+  /// Route Generator
+  final RouteGenerator? routeGenerator;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -213,7 +217,8 @@ class PayFast extends StatefulWidget {
     this.animatedSwitcherWidget,
     this.itemSummarySectionLeadingWidget,
     this.payButtonLeadingWidget,
-    this.paymentSummaryAmountColor,
+    this.paymentSummaryAmountColor, 
+    this.routeGenerator,
   })  : assert(data.containsKey('merchant_id'),
             'Missing required key: merchant_id'),
         assert(data.containsKey('merchant_key'),
@@ -238,15 +243,24 @@ class _PayFastState extends State<PayFast> {
   /// Payment identifier (UUID) that uniquely identifies each payment transaction.
   var paymentIdentifier = '';
 
-  /// A dynamic widget that holds the WebView or any other widget to be displayed.
+  // A dynamic widget that holds the WebView or any other widget to be displayed.
   Widget? _showWebViewWidget;
 
-  /// A boolean flag to show or hide the loading spinner during payment processing.
+  // A boolean flag to show or hide the loading spinner during payment processing.
   bool _showSpinner = false;
+
+  // A boolean flag for hash (#) routing
+  bool _useHashRouting = true;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.routeGenerator != null){
+      if (widget.routeGenerator!.useHashRouting != null){
+        _useHashRouting = widget.routeGenerator!.useHashRouting!;
+      }
+    }
 
     _validate();
   }
@@ -394,10 +408,13 @@ class _PayFastState extends State<PayFast> {
     String paymentCancelledRoute =
         widget.paymentCancelledRoute.replaceAll('/', '');
 
-    final encodedReturnUrl =
-        Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute');
-    final encodedCancelUrl =
-        Uri.encodeComponent('${getBaseUrl()}/#/$paymentCancelledRoute');
+    final encodedReturnUrl = (_useHashRouting)
+        ? Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute')
+        : Uri.encodeComponent('${getBaseUrl()}/$paymentCompletedRoute');
+
+    final encodedCancelUrl = (_useHashRouting)
+        ? Uri.encodeComponent('${getBaseUrl()}/#/$paymentCancelledRoute')
+        : Uri.encodeComponent('${getBaseUrl()}/$paymentCancelledRoute');
 
     html.window.location.href =
         '${widget.onsiteActivationScriptUrl}?uuid=$paymentIdentifier'
