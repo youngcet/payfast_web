@@ -11,17 +11,17 @@
 
 # Payfast Web Flutter Package
 
-A Flutter package to integrate Payfast payments into your Flutter web app. This package is for Flutter Web only. If you're looking for the mobile package, the documentation is here: [PayFast for mobile](https://github.com/youngcet/payfast).
+A Flutter package to integrate Payfast payments into your Flutter web app. **This package is for Flutter Web only. If you're looking for the mobile package, the documentation is here: [PayFast for mobile](https://github.com/youngcet/payfast)**.
 
 [![Pub Version](https://img.shields.io/pub/v/payfast_web)](https://pub.dev/packages/payfast_web)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/youngcet/payfast_web/blob/main/LICENSE)
 <a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/points/payfast_web" alt="Pub points"></a>
-<a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/likes/payfast" alt="Pub Likes"></a>
-<a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/popularity/payfast" alt="Pub popularity"></a>
+<a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/likes/payfast_web" alt="Pub Likes"></a>
+<a href="https://pub.dev/packages/payfast_web"><img src="https://badgen.net/pub/popularity/payfast_web" alt="Pub popularity"></a>
 
 <p align="center">
-  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/sandbox.gif?raw=true" height="500">
-  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/live.gif?raw=true" height="500">
+  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/sandbox.gif?raw=true" height="400">
+  <img src="https://github.com/youngcet/payfast_web/blob/main/doc/live.gif?raw=true" height="400">
 </p>
 <br/>
 <hr/>
