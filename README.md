@@ -459,7 +459,7 @@ To integrate with FluterFlow,
 2. Rename the widget to **PayFastWidget**.
 3. Under Widget Settings, add the following parameters:
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Settings" width="280"/>
+<img src="https://github.com/youngcet/payfast_web/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Settings" width="280"/>
 
 
 4. Add **payfast_web: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
