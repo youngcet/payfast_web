@@ -464,7 +464,7 @@ To integrate with FluterFlow,
 
 4. Add **payfast_web: ^latest_version** to the dependencies and refresh the UI (replace latest_version with the latest version).
 
-<img src="https://github.com/youngcet/payfast/blob/main/doc/flutterflow_dependency.png?raw=true" alt="FlutterFlow Dependency" width="280"/>
+<img src="https://github.com/youngcet/payfast_web/blob/main/doc/flutterflow_dependency.png?raw=true" alt="FlutterFlow Dependency" width="280"/>
 
 
 5. Copy and paste the code below (**do not use the boilerplate code provided**):
@@ -581,7 +581,9 @@ The widget is designed to accept only the required parameters, making it simple 
 
 6. Save and Compile the code. There should be no errors.
 7. In the **Widget Palette**, drag and drop the PayFast Widget onto your page. Select the widget and configure the required parameters. For the `onPaymentCancelled` and `onPaymentCompleted` callbacks, add appropriate actions, such as navigating to a specific page or displaying a confirmation message.
-8. Create new pages for Payment Completed and Payment Cancelled, making sure their routes are set to `paymentCompleted` and `paymentCancelled` respectively. 
+8. Create new pages for Payment Completed and Payment Cancelled, making sure their routes are set to `paymentCompleted` and `paymentCancelled` respectively. You can find the name of the route in the page properties under 'Route Settings'
+
+<img src="https://github.com/youngcet/payfast_web/blob/main/doc/flutterflow_route_settings.png?raw=true" alt="FlutterFlow Route Settings" width="280"/>
 
 **Note**: You can update the route names in the widget above to match your chosen routes.
 
@@ -601,12 +603,12 @@ Use the provided sandbox URL (https://youngcet.github.io/sandbox_payfast_onsite_
 ## How to fix the hash routing conflict:
 If your app doesn't navigate correctly to payment completion or cancellation pages after a transaction—despite having the correct route names—this issue is likely caused by hash routing conflicts.
 
-In your PayFastWidget, override the hash routing `useHashRouting: false` of the `RouteGenerator`.
+In your `PayFast` Widget, disable the hash routing in the `RouteGenerator`.
 ```dart
 PayFast(
   ...
   routeGenerator: RouteGenerator(
-     useHashRouting: false
+     useHashRouting: false  // set to false
   ),
 )
 ```
