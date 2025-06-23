@@ -138,7 +138,31 @@ Alternatively, you can create your own `html` file but make sure to include the 
 </script>
 ```
 
-The html file above supports both payfast's packages (mobile & web).
+You can also add your URLs like this instead of a callback:
+```html
+...
+<script>
+    // DO NOT MODIFY THE CODE BELOW
+    
+    // retrieve the url params that are passed to this file and send them to payfast onsite engine
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const uuid = urlParams.get('uuid');
+    const return_url = urlParams.get('return_url'); 
+    const cancel_url = urlParams.get('cancel_url');
+
+    window.payfast_do_onsite_payment({
+      'uuid':uuid,
+      'return_url': decodeURIComponent(return_url),
+      'cancel_url': decodeURIComponent(cancel_url),
+       'notify_url': 'insert-your-webhook-url'  // optional: A payment confirmation notification will be sent to the "notify_url" you specified.
+    });
+</script> 
+```
+
+### Payment Confirmation
+A payment confirmation notification will be sent to the "notify_url" you specified.
+The full implementation details can be found [here](https://developers.payfast.co.za/docs#step_4_confirm_payment).
 
 To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the Payfast package. 
 
@@ -583,7 +607,7 @@ The widget is designed to accept only the required parameters, making it simple 
 7. In the **Widget Palette**, drag and drop the PayFast Widget onto your page. Select the widget and configure the required parameters. For the `onPaymentCancelled` and `onPaymentCompleted` callbacks, add appropriate actions, such as navigating to a specific page or displaying a confirmation message.
 8. Create new pages for Payment Completed and Payment Cancelled, making sure their routes are set to `paymentCompleted` and `paymentCancelled` respectively. You can find the name of the route in the page properties under 'Route Settings'
 
-<img src="https://github.com/youngcet/payfast_web/blob/main/doc/flutterflow_route_settings.png?raw=true" alt="FlutterFlow Route Settings" width="280"/>
+<img src="https://github.com/youngcet/payfast_web/blob/main/doc/flutterflow_widget_settings.png?raw=true" alt="FlutterFlow Route Settings" width="280"/>
 
 **Note**: You can update the route names in the widget above to match your chosen routes.
 
