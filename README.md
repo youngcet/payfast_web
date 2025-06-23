@@ -99,11 +99,11 @@ Copy the `html` file below and host it on a secure server:
             window.payfast_do_onsite_payment({"uuid":uuid}, function (result) {
                 if (result === true) {
                     // Payment Completed
-                    location.href = return_url ? decodeURIComponent(return_url) : 'completed'; // triggers payment completed widget on app
+                    location.href = decodeURIComponent(return_url); 
                 }
                 else {
-                    // Payment Window Closed
-                    location.href = cancel_url ? decodeURIComponent(cancel_url) : 'closed'; // triggers payment cancelled widget on app
+                    // Payment Cancelled
+                    location.href = decodeURIComponent(cancel_url);
                 }
             });
         </script>
@@ -122,17 +122,17 @@ Alternatively, you can create your own `html` file but make sure to include the 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const uuid = urlParams.get('uuid');
-    const return_url = urlParams.get('return_url'); // -> add to support web
-    const cancel_url = urlParams.get('cancel_url'); // -> add to support we
+    const return_url = urlParams.get('return_url'); 
+    const cancel_url = urlParams.get('cancel_url'); 
 
     window.payfast_do_onsite_payment({"uuid":uuid}, function (result) {
         if (result === true) {
             // Payment Completed
-            location.href = return_url ? decodeURIComponent(return_url) : 'completed'; // triggers payment completed widget on app
+            location.href = decodeURIComponent(return_url);
         }
         else {
-            // Payment Window Closed
-            location.href = cancel_url ? decodeURIComponent(cancel_url) : 'closed'; // triggers payment cancelled widget on app
+            // Payment Cancelled
+            location.href = decodeURIComponent(cancel_url);
         }
     });
 </script>

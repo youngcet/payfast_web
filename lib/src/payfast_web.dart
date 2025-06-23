@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -393,9 +394,10 @@ class _PayFastState extends State<PayFast> {
     if (response['uuid'] == null) {
       setState(() {
         _showWebViewWidget = _error(
-            'An error has occured. Please re-check the Payfast details supplied and try again.',
+            'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
             btnText: 'Retry');
       });
+      return;
     }
 
     paymentIdentifier = response['uuid'];

@@ -140,9 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context) => PayFast(
                           data: {
                             'merchant_id':
-                                '0000000', //replace with your payfast merchant id
+                                '000000000', //replace with your payfast merchant id
                             'merchant_key':
-                                '00000000', //replace with your payfast merchant key
+                                '000000000', //replace with your payfast merchant key
                             'name_first': 'Yung',
                             'name_last': 'Cet',
                             'email_address': 'young.cet@gmail.com',
