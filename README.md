@@ -161,8 +161,7 @@ You can also add your URLs like this instead of a callback:
 ```
 
 ### Payment Confirmation
-A payment confirmation notification will be sent to the "notify_url" you specified.
-The full implementation details can be found [here](https://developers.payfast.co.za/docs#step_4_confirm_payment).
+Payfast will send a payment confirmation notification to the "notify_url" you specified. The full implementation details can be found [here](https://developers.payfast.co.za/docs#step_4_confirm_payment).
 
 To point to a live server, simply change `<script src="https://sandbox.payfast.co.za/onsite/engine.js"></script>` tag to `<script src="https://www.payfast.co.za/onsite/engine.js"></script>`. Take note of the url where the `html` file is hosted, you're going pass it along in the Payfast package. 
 
