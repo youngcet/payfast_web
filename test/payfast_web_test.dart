@@ -16,31 +16,47 @@ void main() {
       expect(find.byType(MyApp), findsOneWidget);
     });
 
-    testWidgets('Payment Summary (Pay Now) is rendered correctly',
-        (WidgetTester tester) async {
-      await tester.runAsync(() => tester.pumpWidget(
-          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo'))));
+    testWidgets('Payment Summary (Pay Now) is rendered correctly', (
+      WidgetTester tester,
+    ) async {
+      await tester.runAsync(
+        () => tester.pumpWidget(
+          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo')),
+        ),
+      );
       expect(find.text('Pay Now'), findsOneWidget);
     });
 
-    testWidgets('Payment Summary (Payment Details) is rendered correctly',
-        (WidgetTester tester) async {
-      await tester.runAsync(() => tester.pumpWidget(
-          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo'))));
+    testWidgets('Payment Summary (Payment Details) is rendered correctly', (
+      WidgetTester tester,
+    ) async {
+      await tester.runAsync(
+        () => tester.pumpWidget(
+          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo')),
+        ),
+      );
       expect(find.text('Payment Details:'), findsOneWidget);
     });
 
-    testWidgets('Payment Summary (Yung Cet) is rendered correctly',
-        (WidgetTester tester) async {
-      await tester.runAsync(() => tester.pumpWidget(
-          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo'))));
+    testWidgets('Payment Summary (Yung Cet) is rendered correctly', (
+      WidgetTester tester,
+    ) async {
+      await tester.runAsync(
+        () => tester.pumpWidget(
+          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo')),
+        ),
+      );
       expect(find.text('Yung Cet'), findsOneWidget);
     });
 
-    testWidgets('Payment Summary (pid) is rendered correctly',
-        (WidgetTester tester) async {
-      await tester.runAsync(() => tester.pumpWidget(
-          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo'))));
+    testWidgets('Payment Summary (pid) is rendered correctly', (
+      WidgetTester tester,
+    ) async {
+      await tester.runAsync(
+        () => tester.pumpWidget(
+          const MaterialApp(home: MyHomePage(title: 'Payfast Widget Demo')),
+        ),
+      );
       expect(find.text('#0000002'), findsOneWidget);
     });
   });

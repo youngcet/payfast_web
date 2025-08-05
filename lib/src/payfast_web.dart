@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -8,7 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:payfast_web/src/route_generator.dart';
 import 'animation/my_animated_switcher.dart';
 import 'constants.dart';
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
 
@@ -39,7 +38,7 @@ import 'widgets/waiting_overlay.dart';
 /// - **[useSandBox]** *(bool)*: Indicates whether to use the PayFast sandbox
 ///   environment for testing. Defaults to `false` for the live environment.
 ///
-/// - **[data]** *(Map<String, dynamic>)*: A map containing payment-related data
+/// - **[data]** *(Map)*: A map containing payment-related data
 ///   such as `merchant_id`, `amount`, and `item_name`. The map must include
 ///   required fields for successful processing.
 ///
@@ -200,6 +199,11 @@ class PayFast extends StatefulWidget {
   /// Route Generator
   final RouteGenerator? routeGenerator;
 
+  /// A callback function invoked when a Payfast error is encountered.
+  ///
+  /// This function is executed after an error has occured from Payfast
+  final Function(String)? onError;
+
   PayFast({
     required this.useSandBox,
     required this.passPhrase,
@@ -218,23 +222,32 @@ class PayFast extends StatefulWidget {
     this.animatedSwitcherWidget,
     this.itemSummarySectionLeadingWidget,
     this.payButtonLeadingWidget,
-    this.paymentSummaryAmountColor, 
+    this.paymentSummaryAmountColor,
     this.routeGenerator,
-  })  : assert(data.containsKey('merchant_id'),
-            'Missing required key: merchant_id'),
-        assert(data.containsKey('merchant_key'),
-            'Missing required key: merchant_key'),
-        assert(
-            data.containsKey('name_first'), 'Missing required key: name_first'),
-        assert(
-            data.containsKey('name_last'), 'Missing required key: name_last'),
-        assert(data.containsKey('email_address'),
-            'Missing required key: email_address'),
-        assert(data.containsKey('m_payment_id'),
-            'Missing required key: m_payment_id'),
-        assert(data.containsKey('amount'), 'Missing required key: amount'),
-        assert(
-            data.containsKey('item_name'), 'Missing required key: item_name');
+    this.onError,
+  }) : assert(
+         data.containsKey('merchant_id'),
+         'Missing required key: merchant_id',
+       ),
+       assert(
+         data.containsKey('merchant_key'),
+         'Missing required key: merchant_key',
+       ),
+       assert(
+         data.containsKey('name_first'),
+         'Missing required key: name_first',
+       ),
+       assert(data.containsKey('name_last'), 'Missing required key: name_last'),
+       assert(
+         data.containsKey('email_address'),
+         'Missing required key: email_address',
+       ),
+       assert(
+         data.containsKey('m_payment_id'),
+         'Missing required key: m_payment_id',
+       ),
+       assert(data.containsKey('amount'), 'Missing required key: amount'),
+       assert(data.containsKey('item_name'), 'Missing required key: item_name');
 
   @override
   State<PayFast> createState() => _PayFastState();
@@ -253,12 +266,15 @@ class _PayFastState extends State<PayFast> {
   // A boolean flag for hash (#) routing
   bool _useHashRouting = true;
 
+  // an error message string
+  String? _errorMsg;
+
   @override
   void initState() {
     super.initState();
 
-    if (widget.routeGenerator != null){
-      if (widget.routeGenerator!.useHashRouting != null){
+    if (widget.routeGenerator != null) {
+      if (widget.routeGenerator!.useHashRouting != null) {
         _useHashRouting = widget.routeGenerator!.useHashRouting!;
       }
     }
@@ -278,7 +294,7 @@ class _PayFastState extends State<PayFast> {
   void _validate() {
     bool _validURL =
         Uri.tryParse(widget.onsiteActivationScriptUrl)?.hasAbsolutePath ??
-            false;
+        false;
     if (!_validURL || !widget.onsiteActivationScriptUrl.startsWith('https')) {
       throw Exception('onsiteActivationScriptUrl URL not valid');
     }
@@ -286,7 +302,7 @@ class _PayFastState extends State<PayFast> {
 
   /// A set of gesture recognizers used to handle touch gestures.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-    Factory(() => EagerGestureRecognizer())
+    Factory(() => EagerGestureRecognizer()),
   };
 
   /// get api endpoint
@@ -315,8 +331,17 @@ class _PayFastState extends State<PayFast> {
     if (response.statusCode == 200) {
       jsonResponse = jsonDecode(response.body);
     } else {
+      final regex = RegExp(r'<span\s+class="err-msg"\s*>(.*?)<\/span>');
+      final match = regex.firstMatch(response.body);
+      String? extracted = match?.group(1);
+
+      if (extracted != null) {
+        extracted = extracted.replaceAll(RegExp(r'<[^>]*>'), '');
+      }
+
       setState(() {
-        _showWebViewWidget = Html(data: response.body);
+        _errorMsg = extracted;
+        //_showWebViewWidget = Html(data: response.body);
       });
     }
 
@@ -391,11 +416,25 @@ class _PayFastState extends State<PayFast> {
   /// and resource errors.
   void _showWebView() async {
     var response = await _requestPaymentIdentifier();
+    if (_errorMsg != null) {
+      if (widget.onError != null) {
+        widget.onError!(_errorMsg!);
+        return;
+      }
+
+      setState(() {
+        _showWebViewWidget = _error(_errorMsg!, btnText: 'Retry');
+      });
+
+      return;
+    }
+
     if (response['uuid'] == null) {
       setState(() {
         _showWebViewWidget = _error(
-            'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
-            btnText: 'Retry');
+          'Unable to generate a payment reference. Please try again or contact support — the payment system may be temporarily unavailable.',
+          btnText: 'Retry',
+        );
       });
       return;
     }
@@ -405,10 +444,14 @@ class _PayFastState extends State<PayFast> {
       _showSpinner = true;
     });
 
-    String paymentCompletedRoute =
-        widget.paymentCompletedRoute.replaceAll('/', '');
-    String paymentCancelledRoute =
-        widget.paymentCancelledRoute.replaceAll('/', '');
+    String paymentCompletedRoute = widget.paymentCompletedRoute.replaceAll(
+      '/',
+      '',
+    );
+    String paymentCancelledRoute = widget.paymentCancelledRoute.replaceAll(
+      '/',
+      '',
+    );
 
     final encodedReturnUrl = (_useHashRouting)
         ? Uri.encodeComponent('${getBaseUrl()}/#/$paymentCompletedRoute')
@@ -444,11 +487,7 @@ class _PayFastState extends State<PayFast> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 100,
-              ),
+              const Icon(Icons.error, color: Colors.red, size: 100),
               const SizedBox(height: 20),
               const Text(
                 'Error!',
@@ -462,10 +501,7 @@ class _PayFastState extends State<PayFast> {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -475,16 +511,15 @@ class _PayFastState extends State<PayFast> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
                   backgroundColor: Colors.red,
                 ),
                 child: Text(
                   btnText ?? 'Continue',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ],
@@ -497,70 +532,73 @@ class _PayFastState extends State<PayFast> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: widget.backgroundColor ?? Colors.transparent,
-        child: Column(
-          children: [
-            // Show spinner with AnimatedSwitcher
-            AnimatedSwitcher(
-              duration: widget.animatedSwitcherWidget?.getDuration() ??
+      color: widget.backgroundColor ?? Colors.transparent,
+      child: Column(
+        children: [
+          // Show spinner with AnimatedSwitcher
+          AnimatedSwitcher(
+            duration:
+                widget.animatedSwitcherWidget?.getDuration() ??
+                const Duration(milliseconds: 500),
+            transitionBuilder:
+                widget.animatedSwitcherWidget?.getTransitionBuilder() ??
+                (child, animation) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1), // Start off-screen
+                      end: Offset.zero, // End on-screen
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+            child: _showSpinner
+                ? WaitingOverlay(
+                    key: const ValueKey('WaitingOverlay'),
+                    child: widget.waitingOverlayWidget,
+                  )
+                : const SizedBox.shrink(),
+          ),
+
+          // Content Switcher for WebView or SummaryWidget
+          Expanded(
+            child: AnimatedSwitcher(
+              duration:
+                  widget.animatedSwitcherWidget?.getDuration() ??
                   const Duration(milliseconds: 500),
               transitionBuilder:
                   widget.animatedSwitcherWidget?.getTransitionBuilder() ??
-                      (child, animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0, 1), // Start off-screen
-                            end: Offset.zero, // End on-screen
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-              child: _showSpinner
-                  ? WaitingOverlay(
-                      key: const ValueKey('WaitingOverlay'),
-                      child: widget.waitingOverlayWidget,
-                    )
-                  : const SizedBox.shrink(),
-            ),
-
-            // Content Switcher for WebView or SummaryWidget
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: widget.animatedSwitcherWidget?.getDuration() ??
-                    const Duration(milliseconds: 500),
-                transitionBuilder:
-                    widget.animatedSwitcherWidget?.getTransitionBuilder() ??
-                        (child, animation) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0, 1), // Start off-screen
-                              end: Offset.zero, // End on-screen
-                            ).animate(animation),
-                            child: child,
-                          );
-                        },
-                child: _showWebViewWidget != null
-                    ? _showWebViewWidget!
-                    : SummaryWidget(
-                        key: const ValueKey('SummaryWidget'),
-                        paymentSummaryWidget: PaymentSummary(
-                          data: widget.data,
-                          title: widget.paymentSummaryTitle,
-                          icon: widget.defaultPaymentSummaryIcon,
-                          itemSectionLeadingWidget:
-                              widget.itemSummarySectionLeadingWidget,
-                          paymentSummaryAmountColor:
-                              widget.paymentSummaryAmountColor,
-                          child: widget.paymentSumarryWidget,
-                        ),
-                        onPayButtonPressed: _showWebView,
-                        payButtonStyle: widget.payButtonStyle,
-                        payButtonText: widget.payButtonText,
-                        payButtonLeadingWidget: widget.payButtonLeadingWidget,
+                  (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 1), // Start off-screen
+                        end: Offset.zero, // End on-screen
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+              child: _showWebViewWidget != null
+                  ? _showWebViewWidget!
+                  : SummaryWidget(
+                      key: const ValueKey('SummaryWidget'),
+                      paymentSummaryWidget: PaymentSummary(
+                        data: widget.data,
+                        title: widget.paymentSummaryTitle,
+                        icon: widget.defaultPaymentSummaryIcon,
+                        itemSectionLeadingWidget:
+                            widget.itemSummarySectionLeadingWidget,
+                        paymentSummaryAmountColor:
+                            widget.paymentSummaryAmountColor,
+                        child: widget.paymentSumarryWidget,
                       ),
-              ),
+                      onPayButtonPressed: _showWebView,
+                      payButtonStyle: widget.payButtonStyle,
+                      payButtonText: widget.payButtonText,
+                      payButtonLeadingWidget: widget.payButtonLeadingWidget,
+                    ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

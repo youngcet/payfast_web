@@ -1,18 +1,19 @@
 name: payfast_web
 description: A Flutter package to integrate Payfast payments into your Flutter web application.
-version: 0.0.2+1
+version: 1.0.0
 homepage: https://github.com/youngcet/payfast_web
 
 environment:
-  sdk: '>=2.19.5 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.8.0 <4.0.0'
+  flutter: ">=3.22.0"
 
 dependencies:
-  crypto: ^3.0.3
+  crypto: ^3.0.6
   flutter:
     sdk: flutter
-  flutter_html: ^3.0.0-alpha.3
-  http: ^0.13.6
+  flutter_html: ^3.0.0
+  web: ^1.1.1
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

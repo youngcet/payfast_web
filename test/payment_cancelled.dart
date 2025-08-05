@@ -14,21 +14,14 @@ class PaymentCancelledScreen extends StatelessWidget {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(
-              color: Colors.redAccent,
-              width: 1,
-            ),
+            side: const BorderSide(color: Colors.redAccent, width: 1),
           ),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.close,
-                  color: Colors.redAccent,
-                  size: 100,
-                ),
+                const Icon(Icons.close, color: Colors.redAccent, size: 100),
                 const SizedBox(height: 20),
                 const Text(
                   'Payment Cancelled!',
@@ -42,10 +35,7 @@ class PaymentCancelledScreen extends StatelessWidget {
                 const Text(
                   'Your payment was cancelled. No charges were made.\nPlease try again or contact support if you need assistance.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
@@ -61,10 +51,7 @@ class PaymentCancelledScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     'Continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ],
