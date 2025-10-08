@@ -188,38 +188,6 @@ dependencies:
   payfast_web: ^latest_version
 ```
 
-### Android And IOS Setup
-
-
-|             | Android | iOS   | macOS  |
-|-------------|---------|-------|--------|
-| **Support** | SDK 21+ | 12.0+ | 10.14+ |
-
-
-
-**Android Setup**
-
-Set `minSdkVersion` in `android/app/build.gradle` to greater than 19:
-
-```groovy
-android {
-    defaultConfig {
-        minSdkVersion 21
-    }
-}
-```
-
-Add `<uses-permission android:name="android.permission.INTERNET" />` permission in `android/app/src/main/AndroidManifest.xml`.
-
-**IOS Setup**
-
-Add the key below in `ios/Runner/Info.plist`
-
-```groovy
-<key>io.flutter.embedded_views_preview</key>
-<string>YES</string>
-```
-
 **Import the package and create a PayFast Widget**
 
 ```dart
