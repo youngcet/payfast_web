@@ -9,7 +9,6 @@ import 'animation/my_animated_switcher.dart';
 import 'constants.dart';
 import 'package:web/web.dart' as html;
 import 'package:http/http.dart' as http;
-import 'package:flutter_html/flutter_html.dart';
 
 import 'widgets/payment_summary.dart';
 import 'widgets/summary_widget.dart';

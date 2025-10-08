@@ -156,7 +156,6 @@ You can also add your URLs like this instead of a callback:
       'uuid':uuid,
       'return_url': decodeURIComponent(return_url),
       'cancel_url': decodeURIComponent(cancel_url),
-       'notify_url': 'insert-your-webhook-url'  // optional: A payment confirmation notification will be sent to the "notify_url" you specified.
     });
 </script> 
 ```
